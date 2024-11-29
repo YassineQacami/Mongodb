@@ -154,18 +154,7 @@ Voici les requêtes MongoDB demandées dans le TP :
 
 ### 11. **Afficher les films ayant toutes les notes > 10 :**
    ```javascript
-   db.films.find(
-  {
-    genre: "Action", 
-    country: "FR", 
-    grades: { 
-      $not: { 
-        $elemMatch: { note: { $lte: 10 } }
-      } 
-    }
-  }, 
-  { _id: 0, title: 1, grades: 1 }
-)
+   db.films.find({ genre: "Action", country: "FR", grades: { $not: { $elemMatch: { note: { $lte: 10 } } } } }, { _id: 0, title: 1, grades: 1 })
    ```
 
 ---
