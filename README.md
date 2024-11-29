@@ -1,17 +1,4 @@
 # Mongodb6
-
-![image](https://github.com/user-attachments/assets/fd4682b2-f49f-4700-8a98-e3759f8434d0)
-
-![image](https://github.com/user-attachments/assets/34cf83c6-399d-4216-9d03-c1a676867499)
-
-![image](https://github.com/user-attachments/assets/1a82aec3-c3ae-47f8-9c36-9310c4a39f6f)
-
-![image](https://github.com/user-attachments/assets/0012b6b2-5485-4c4b-9e8b-603c51fb5d01)
-
-![image](https://github.com/user-attachments/assets/427cca5b-a0e9-4315-97a7-3a8157e2b6ff)
-
-Voici une explication détaillée et étape par étape pour utiliser MongoDB avec Docker et réaliser le TP.
-
 ---
 
 ## **Étape 1 : Installer Docker**
@@ -21,9 +8,6 @@ Voici une explication détaillée et étape par étape pour utiliser MongoDB ave
    docker --version
    ```
    Si Docker n’est pas installé, téléchargez-le depuis [Docker](https://www.docker.com/) et suivez les instructions pour votre système d’exploitation.
-
-2. **Installer Docker Compose (facultatif) :**
-   Si vous prévoyez d’utiliser Docker Compose, installez-le également.
 
 ---
 
@@ -50,28 +34,8 @@ Voici une explication détaillée et étape par étape pour utiliser MongoDB ave
 
 ## **Étape 3 : Préparer les données**
 
-1. **Créez ou téléchargez le fichier `films.json`.**
-   Placez les données dans un fichier appelé `films.json` dans votre répertoire de travail. Par exemple :
-   ```json
-   [
-     {
-       "title": "Film Action 1",
-       "year": 1963,
-       "genre": "Action",
-       "country": "France",
-       "grades": [12, 15],
-       "artists": ["artist:4", "artist:18"]
-     },
-     {
-       "title": "Film Action 2",
-       "year": 1997,
-       "genre": "Action",
-       "country": "USA",
-       "grades": [9, 8],
-       "artists": ["Leonardo DiCaprio"]
-     }
-   ]
-   ```
+1. **Téléchargez le fichier `films.json`.**
+   Placez les données dans un fichier appelé `films.json` dans votre répertoire de travail.
 
 ---
 
@@ -148,42 +112,42 @@ Voici les requêtes MongoDB demandées dans le TP :
 
 ### 5. **Afficher les films d’action produits en France :**
    ```javascript
-   db.films.find({ genre: "Action", country: "France" })
+   db.films.find({ genre: "Action", country: "FR" })
    ```
 
 ---
 
 ### 6. **Afficher les films d’action produits en France en 1963 :**
    ```javascript
-   db.films.find({ genre: "Action", country: "France", year: 1963 })
+   db.films.find({ genre: "Action", country: "FR", year: 1963 })
    ```
 
 ---
 
 ### 7. **Afficher les films d’action en France sans les notes (grades) :**
    ```javascript
-   db.films.find({ genre: "Action", country: "France" }, { grades: 0 })
+   db.films.find({ genre: "Action", country: "FR" }, { grades: 0 })
    ```
 
 ---
 
 ### 8. **Afficher les films sans identifiants (_id) :**
    ```javascript
-   db.films.find({ genre: "Action", country: "France" }, { _id: 0, grades: 0 })
+   db.films.find({ genre: "Action", country: "FR" }, { _id: 0, grades: 0 })
    ```
 
 ---
 
 ### 9. **Afficher les titres et grades des films d’action en France :**
    ```javascript
-   db.films.find({ genre: "Action", country: "France" }, { _id: 0, title: 1, grades: 1 })
+   db.films.find({ genre: "Action", country: "FR" }, { _id: 0, title: 1, grades: 1 })
    ```
 
 ---
 
 ### 10. **Afficher les films avec une note > 10 :**
    ```javascript
-   db.films.find({ genre: "Action", country: "France", grades: { $gt: 10 } }, { _id: 0, title: 1, grades: 1 })
+   db.films.find({ genre: "Action", country: "FR", grades: { $gt: 10 } }, { _id: 0, title: 1, grades: 1 })
    ```
 
 ---
