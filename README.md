@@ -147,14 +147,14 @@ Voici les requêtes MongoDB demandées dans le TP :
 
 ### 10. **Afficher les films avec une note > 10 :**
    ```javascript
-   db.films.find({ genre: "Action", country: "FR", grades: { $gt: 10 } }, { _id: 0, title: 1, grades: 1 })
+   db.films.find({ genre: "Action", country: "FR", "grades.note": { $gt: 10 } }, { _id: 0, title: 1, grades: 1 })
    ```
 
 ---
 
 ### 11. **Afficher les films ayant toutes les notes > 10 :**
    ```javascript
-   db.films.find({ genre: "Action", grades: { $not: { $elemMatch: { $lte: 10 } } } }, { _id: 0, title: 1, grades: 1 })
+   db.films.find({ genre: "Action", "grades.note": { $not: { $elemMatch: { $lte: 10 } } } }, { _id: 0, title: 1, grades: 1 })
    ```
 
 ---
@@ -189,14 +189,14 @@ Voici les requêtes MongoDB demandées dans le TP :
 
 ### 16. **Films avec Leonardo DiCaprio en 1997 :**
    ```javascript
-   db.films.find({ artists: "Leonardo DiCaprio", year: 1997 })
+   db.films.find({ "actors.first_name": "Leonardo", "actors.last_name": "DiCaprio", year: 1997 })
    ```
 
 ---
 
 ### 17. **Films avec Leonardo DiCaprio ou en 1997 :**
    ```javascript
-   db.films.find({ $or: [{ artists: "Leonardo DiCaprio" }, { year: 1997 }] })
+   db.films.find({ $or: [{ "actors.first_name": "Leonardo", "actors.last_name": "DiCaprio"}, { year: 1997 }] })
    ```
 
 ---
