@@ -201,7 +201,7 @@ Voici les requêtes MongoDB demandées dans le TP :
 
 ---
 
-## **Étape 7 : Arrêter MongoDB après le TP**
+## **Étape 7 : Arrêter MongoDB**
 
 Pour arrêter MongoDB :
 ```bash
