@@ -42,38 +42,157 @@ CouchDB fonctionne comme un serveur HTTP où chaque base de données est un ense
 
 ### 4. MapReduce dans CouchDB
 CouchDB utilise MapReduce pour créer des vues. **Map** transforme les données en clé-valeur, tandis que **Reduce** agrège les résultats.
+Voici la version structurée de votre contenu avec des titres numérotés en commençant par 4.1, comme demandé :
 
-#### 4.1. Fonction Map
-La fonction Map est exécutée sur chaque document pour générer une clé et une valeur :
+---
+
+#### 4.1 MapReduce en Général  
+MapReduce est un paradigme de programmation permettant de traiter de grandes quantités de données de manière distribuée. Il divise le traitement en deux phases principales : **Map** et **Reduce**.
+
+1. **Fonction Map** :  
+   - La fonction Map prend en entrée un ensemble de données.  
+   - Elle traite chaque élément indépendamment pour produire des paires **clé/valeur**.  
+   - Chaque nœud traite une partie des données en parallèle.  
+
+2. **Fonction Reduce** :  
+   - La fonction Reduce combine les résultats intermédiaires générés par la fonction Map.  
+   - Elle regroupe les données par clé et applique une opération d'agrégation (comme un total, une moyenne, etc.).  
+
+---
+
+#### 4.2 Exemple Général de MapReduce  
+Considérons un ensemble de documents représentant des ventes de produits :  
+```json
+[
+  {"produit": "A", "quantite": 10},
+  {"produit": "B", "quantite": 5},
+  {"produit": "A", "quantite": 7}
+]
+```
+
+##### 4.2.1 Fonction Map  
+La fonction Map extrait les ventes par produit :  
 ```javascript
-function (doc) {
-  emit(doc.city, 1);
+function(doc) {
+  emit(doc.produit, doc.quantite);
 }
 ```
-- **emit** : Émet une paire clé-valeur.
-- Exemple : Si le document a `city: "Paris"`, la clé sera "Paris" et la valeur sera `1`.
+**Résultat de Map** :  
+```
+A: 10  
+B: 5  
+A: 7  
+```
 
-#### 4.2. Fonction Reduce
-La fonction Reduce agrège les valeurs en fonction des clés :
+##### 4.2.2 Fonction Reduce  
+La fonction Reduce additionne les quantités par produit :  
 ```javascript
-function (keys, values, rereduce) {
+function(keys, values) {
   return sum(values);
 }
 ```
-- **keys** : Les clés retournées par la fonction Map.
-- **values** : Les valeurs associées aux clés.
-- **sum** : Fonction qui additionne toutes les valeurs pour une clé donnée.
+**Résultat Final** :  
+```
+A: 17  
+B: 5  
+```
 
-#### 4.3. Exemple
-Si la fonction Map produit les clés `Paris`, `Lyon`, `Paris`, la fonction Reduce les agrège comme suit :
+---
+
+#### 4.3 MapReduce dans CouchDB  
+Dans CouchDB, **MapReduce** est utilisé pour créer des vues indexées. Une vue est composée d'une fonction Map (obligatoire) et d'une fonction Reduce (optionnelle).  
+
+##### 4.3.1 Fonction Map par Défaut  
+La fonction Map prend un document en paramètre et traite chaque document indépendamment pour générer des paires clé/valeur. Cette exécution est effectuée de manière parallèle sur chaque nœud dans un cluster CouchDB.  
+
+**Structure d'une Vue** :  
 ```json
 {
-  "Paris": 2,
-  "Lyon": 1
+  "views": {
+    "nom_vue": {
+      "map": "function(doc) { emit(doc.cle, doc.valeur); }",
+      "reduce": "_sum"
+    }
+  }
 }
 ```
 
 ---
+
+#### 4.4 Exemple 1 : Compter les Produits  
+##### 4.4.1 Fonction Map  
+```javascript
+function(doc) {
+  if (doc.produit) {
+    emit(doc.produit, 1);
+  }
+}
+```
+**Résultat de Map** :  
+```
+A: 1  
+B: 1  
+A: 1  
+```
+
+##### 4.4.2 Fonction Reduce  
+```javascript
+function(keys, values) {
+  return sum(values);
+}
+```
+**Résultat Final** :  
+```
+A: 2  
+B: 1  
+```
+
+---
+
+#### 4.5 Exemple 2 : Total des Quantités par Produit  
+##### 4.5.1 Fonction Map  
+```javascript
+function(doc) {
+  if (doc.produit && doc.quantite) {
+    emit(doc.produit, doc.quantite);
+  }
+}
+```
+**Résultat de Map** :  
+```
+A: 10  
+B: 5  
+A: 7  
+```
+
+##### 4.5.2 Fonction Reduce  
+```javascript
+function(keys, values) {
+  return sum(values);
+}
+```
+**Résultat Final** :  
+```
+A: 17  
+B: 5  
+```
+
+---
+
+#### 4.6 Exécuter une Vue dans CouchDB  
+Une fois la vue créée dans un design document, exécutez-la :  
+```bash
+curl -X GET http://login:password@localhost:5984/BD_NAME/_design/DOC_VIEW/_view/nom_vue
+```
+
+---
+
+#### 4.7 Réplication et MapReduce  
+CouchDB garantit que les vues MapReduce sont automatiquement répliquées entre les nœuds pour une meilleure performance. Chaque nœud traite un sous-ensemble de données, puis les résultats sont combinés pour produire une sortie globale.
+
+---
+
+Si vous souhaitez des ajouts ou des ajustements, n'hésitez pas !
 
 ### 5. API REST de CouchDB
 L'accès aux données CouchDB se fait via des requêtes HTTP simples. Voici quelques exemples courants :
