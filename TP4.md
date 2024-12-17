@@ -359,9 +359,7 @@ def reducer(page, values):
 
 Le produit de la matrice \( M \) avec un vecteur \( W(w_1, w_2, ..., w_N) \) est donné par :
 
-\[
-\phi_i = \sum_{j=1}^N M_{ij} \cdot w_j
-\]
+\(\phi_i = \sum_{j=1}^N M_{ij} \cdot w_j\)
 
 Ici, \( W \) est un vecteur statique accessible à toutes les fonctions **Map** et **Reduce**.
 
