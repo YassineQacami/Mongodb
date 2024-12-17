@@ -367,7 +367,7 @@ Ici, \( W \) est un vecteur statique accessible à toutes les fonctions **Map** 
 - Pour chaque document (ligne \( i \)) de la collection **C**, multiplier les poids des liens \( $w_{ij}$ \) par la valeur correspondante dans le vecteur \( W \).
 
 **Input** :  
-Vecteur Vecteur \( W = \{w_1: 1.0, w_2: 0.5, \dots, w_N: x_N \} \)
+Vecteur $W = \{w_1: 1.0, w_2: 0.5, \dots, w_N: \text{valeur}\}$
 
 Document :  
 ```json
