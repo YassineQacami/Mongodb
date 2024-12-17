@@ -189,10 +189,6 @@ curl -X GET http://login:password@localhost:5984/BD_NAME/_design/DOC_VIEW/_view/
 #### 4.7 Réplication et MapReduce  
 CouchDB garantit que les vues MapReduce sont automatiquement répliquées entre les nœuds pour une meilleure performance. Chaque nœud traite un sous-ensemble de données, puis les résultats sont combinés pour produire une sortie globale.
 
----
-
-Si vous souhaitez des ajouts ou des ajustements, n'hésitez pas !
-
 ### 5. API REST de CouchDB
 L'accès aux données CouchDB se fait via des requêtes HTTP simples. Voici quelques exemples courants :
 
