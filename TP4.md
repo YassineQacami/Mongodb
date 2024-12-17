@@ -1,4 +1,4 @@
-## Rapport sur CouchDB
+# Rapport sur CouchDB
 
 ### 1. Introduction
 CouchDB est une base de données NoSQL open-source développée par Apache Software Foundation. Elle est conçue pour stocker, répliquer et synchroniser des données de manière fiable. CouchDB repose sur une architecture orientée documents (Document-Oriented Database) et utilise JSON pour stocker les données.
