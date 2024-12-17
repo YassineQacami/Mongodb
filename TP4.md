@@ -281,7 +281,7 @@ CouchDB est une solution flexible et robuste pour les bases de données document
 
 ## 1. **Représentation structurée de la matrice M**
 
-Pour représenter une matrice **M** de dimension **N×N** sous forme de documents structurés (comme dans le cas de **PageRank**), chaque ligne de la matrice peut être vue comme un document décrivant une page web \( P_i \).
+Pour représenter une matrice **M** de dimension **N×N** sous forme de documents structurés (comme dans le cas de **PageRank**), chaque ligne de la matrice peut être vue comme un document décrivant une page web \( $P_i$ \).
 
 Un exemple de structure JSON pour un document dans la collection **C** est le suivant :
 
@@ -298,14 +298,14 @@ Un exemple de structure JSON pour un document dans la collection **C** est le su
 ```
 
 ### Explications :
-- **page** : Identifiant de la page \( P_i \).
-- **links** : Liste des pages cibles \( P_j \) avec leurs poids associés \( w_{ij} \), correspondant aux éléments non nuls de la ligne \( i \) de la matrice \( M \).
+- **page** : Identifiant de la page \( $P_i$ \).
+- **links** : Liste des pages cibles \( $P_j$ \) avec leurs poids associés \( $w_{ij}$ \), correspondant aux éléments non nuls de la ligne \( i \) de la matrice \( M \).
 
 ---
 
 ## 2. **Calcul de la norme des vecteurs**
 
-La norme d'un vecteur \( V(v_1, v_2, ..., v_N) \) est définie par :
+La norme d'un vecteur \( V($v_1, v_2, ..., v_N$) \) est définie par :
 
 ||V|| = √(v₁² + v₂² + ... + vₙ²)
 
@@ -337,7 +337,7 @@ def mapper(document):
 ```
 
 ### Étape **Reduce** :
-- Regrouper les valeurs par page (\( P_i \)).
+- Regrouper les valeurs par page (\( $P_i$ \)).
 - Calculer la somme des carrés et prendre la racine carrée.
 
 **Reduce** (pseudo-code) :
@@ -364,10 +364,10 @@ $\phi_i = \sum_{j=1}^N M_{ij} \cdot w_j$
 Ici, \( W \) est un vecteur statique accessible à toutes les fonctions **Map** et **Reduce**.
 
 ### Étape **Map** :
-- Pour chaque document (ligne \( i \)) de la collection **C**, multiplier les poids des liens \( w_{ij} \) par la valeur correspondante dans le vecteur \( W \).
+- Pour chaque document (ligne \( i \)) de la collection **C**, multiplier les poids des liens \( $w_{ij}$ \) par la valeur correspondante dans le vecteur \( W \).
 
 **Input** :  
-Vecteur \( W = \{w_1: 1.0, w_2: 0.5, ...\} \)
+Vecteur \( W = \{$w_1: 1.0, w_2: 0.5, ...\$} \)
 
 Document :  
 ```json
@@ -392,7 +392,7 @@ def mapper(document):
 ```
 
 ### Étape **Reduce** :
-- Regrouper les valeurs par page (\( P_i \)).
+- Regrouper les valeurs par page (\( $P_i$ \)).
 - Calculer la somme des produits pour chaque page.
 
 **Reduce** (pseudo-code) :
@@ -416,7 +416,7 @@ def reducer(page, values):
    - Mapper : Émettre le carré des poids.
    - Reducer : Calculer la somme des carrés et prendre la racine carrée.
 3. **Produit matrice-vecteur** :
-   - Mapper : Multiplier chaque poids \( M_{ij} \) par la valeur \( w_j \) du vecteur \( W \).
+   - Mapper : Multiplier chaque poids \( $M_{ij}$ \) par la valeur \( $w_j$ \) du vecteur \( W \).
    - Reducer : Calculer la somme des produits pour chaque page.
 
 ---
