@@ -357,7 +357,7 @@ def reducer(page, values):
 
 ## 3. **Produit de la matrice M avec un vecteur W**
 
-Le produit de la matrice \( M \) avec un vecteur \( W(w_1, w_2, ..., w_N) \) est donné par :
+Le produit de la matrice \( M \) avec un vecteur \( W($w_1, w_2, ..., w_N$) \) est donné par :
 
 $\phi_i = \sum_{j=1}^N M_{ij} \cdot w_j$
 
