@@ -307,9 +307,7 @@ Un exemple de structure JSON pour un document dans la collection **C** est le su
 
 La norme d'un vecteur \( V(v_1, v_2, ..., v_N) \) est définie par :
 
-
-||V|| = \sqrt{v_1^2 + v_2^2 + ... + v_N^2}
-
+||V|| = √(v₁² + v₂² + ... + vₙ²)
 
 ### Traitement MapReduce pour calculer la norme des vecteurs :
 Chaque ligne \( i \) de la matrice \( M \) est un vecteur. Voici comment procéder :
