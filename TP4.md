@@ -274,3 +274,157 @@ CouchDB est utilisé dans plusieurs domaines :
 ### 8. Conclusion
 CouchDB est une solution flexible et robuste pour les bases de données documentaires, grâce à son API REST, son support de la réplication, et son modèle de stockage JSON. Son intégration avec Docker en facilite le déploiement et son utilisation dans des applications modernes. Il est particulièrement adapté aux besoins des applications distribuées et hors-ligne.
 
+---
+---
+
+# Exercie 1
+
+## 1. **Représentation structurée de la matrice M**
+
+Pour représenter une matrice **M** de dimension **N×N** sous forme de documents structurés (comme dans le cas de **PageRank**), chaque ligne de la matrice peut être vue comme un document décrivant une page web \( P_i \).
+
+Un exemple de structure JSON pour un document dans la collection **C** est le suivant :
+
+```json
+{
+  "page": "P_i",
+  "links": [
+    {"target": "P_j1", "weight": w_ij1},
+    {"target": "P_j2", "weight": w_ij2},
+    ...
+    {"target": "P_jN", "weight": w_ijN}
+  ]
+}
+```
+
+### Explications :
+- **page** : Identifiant de la page \( P_i \).
+- **links** : Liste des pages cibles \( P_j \) avec leurs poids associés \( w_{ij} \), correspondant aux éléments non nuls de la ligne \( i \) de la matrice \( M \).
+
+---
+
+## 2. **Calcul de la norme des vecteurs**
+
+La norme d'un vecteur \( V(v_1, v_2, ..., v_N) \) est définie par :
+
+\[
+||V|| = \sqrt{v_1^2 + v_2^2 + ... + v_N^2}
+\]
+
+### Traitement MapReduce pour calculer la norme des vecteurs :
+Chaque ligne \( i \) de la matrice \( M \) est un vecteur. Voici comment procéder :
+
+### Étape **Map** :
+- Pour chaque document (ligne \( i \)) de la collection **C**, émettre les carrés des poids pour chaque lien.
+
+**Input** :  
+```json
+{"page": "P_i", "links": [{"target": "P_j1", "weight": 0.5}, {"target": "P_j2", "weight": 0.3}]}
+```
+
+**Map** (pseudo-code) :
+```python
+def mapper(document):
+    page = document['page']
+    links = document['links']
+    for link in links:
+        weight = link['weight']
+        emit(page, weight ** 2)
+```
+
+**Output** :  
+```plaintext
+(P_i, 0.25)
+(P_i, 0.09)
+```
+
+### Étape **Reduce** :
+- Regrouper les valeurs par page (\( P_i \)).
+- Calculer la somme des carrés et prendre la racine carrée.
+
+**Reduce** (pseudo-code) :
+```python
+def reducer(page, values):
+    sum_of_squares = sum(values)
+    norm = math.sqrt(sum_of_squares)
+    emit(page, norm)
+```
+
+**Output** :  
+```plaintext
+(P_i, 0.559)
+```
+
+---
+
+## 3. **Produit de la matrice M avec un vecteur W**
+
+Le produit de la matrice \( M \) avec un vecteur \( W(w_1, w_2, ..., w_N) \) est donné par :
+
+\[
+\phi_i = \sum_{j=1}^N M_{ij} \cdot w_j
+\]
+
+Ici, \( W \) est un vecteur statique accessible à toutes les fonctions **Map** et **Reduce**.
+
+### Étape **Map** :
+- Pour chaque document (ligne \( i \)) de la collection **C**, multiplier les poids des liens \( w_{ij} \) par la valeur correspondante dans le vecteur \( W \).
+
+**Input** :  
+Vecteur \( W = \{w_1: 1.0, w_2: 0.5, ...\} \)
+
+Document :  
+```json
+{"page": "P_i", "links": [{"target": "P_j1", "weight": 0.5}, {"target": "P_j2", "weight": 0.3}]}
+```
+
+**Map** (pseudo-code) :
+```python
+def mapper(document):
+    page = document['page']
+    links = document['links']
+    for link in links:
+        target = link['target']
+        weight = link['weight']
+        emit(page, weight * W[target])  # W[target] est la valeur w_j correspondante
+```
+
+**Output** :  
+```plaintext
+(P_i, 0.5 * W[P_j1]) → (P_i, 0.5)
+(P_i, 0.3 * W[P_j2]) → (P_i, 0.15)
+```
+
+### Étape **Reduce** :
+- Regrouper les valeurs par page (\( P_i \)).
+- Calculer la somme des produits pour chaque page.
+
+**Reduce** (pseudo-code) :
+```python
+def reducer(page, values):
+    total = sum(values)
+    emit(page, total)
+```
+
+**Output** :  
+```plaintext
+(P_i, 0.65)
+```
+
+---
+
+## **Résumé du processus MapReduce**
+
+1. **Représentation** : Chaque ligne de la matrice est un document contenant les poids des liens.
+2. **Calcul de la norme** :
+   - Mapper : Émettre le carré des poids.
+   - Reducer : Calculer la somme des carrés et prendre la racine carrée.
+3. **Produit matrice-vecteur** :
+   - Mapper : Multiplier chaque poids \( M_{ij} \) par la valeur \( w_j \) du vecteur \( W \).
+   - Reducer : Calculer la somme des produits pour chaque page.
+
+---
+
+## **Performances et parallélisation**
+- Le **MapReduce** permet de distribuer le calcul de la norme et du produit matrice-vecteur sur plusieurs nœuds, ce qui est particulièrement efficace pour de très grandes matrices.
+- La taille du vecteur \( W \) est \( N \), mais il est en mémoire (RAM) et accessible statiquement, ce qui évite des lectures coûteuses.
