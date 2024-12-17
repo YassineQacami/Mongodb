@@ -42,7 +42,6 @@ CouchDB fonctionne comme un serveur HTTP où chaque base de données est un ense
 
 ### 4. MapReduce dans CouchDB
 CouchDB utilise MapReduce pour créer des vues. **Map** transforme les données en clé-valeur, tandis que **Reduce** agrège les résultats.
-Voici la version structurée de votre contenu avec des titres numérotés en commençant par 4.1, comme demandé :
 
 ---
 
